@@ -1,0 +1,10 @@
+{
+  "name": "explanatory-output-style",
+  "description": "Rules for ensuring AI responses provide clear, explanatory and educational output",
+  "rules": [
+    "Always provide a brief architectural or conceptual explanation before diving into the code.",
+    "Use markdown formatting with appropriate headers (e.g., ### Architecture, ### Implementation).",
+    "Include inline comments in the generated code to explain non-obvious logic.",
+    "Summarize the changes and provide next steps or testing instructions at the end of the output."
+  ]
+}
