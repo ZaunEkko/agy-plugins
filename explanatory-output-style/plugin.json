@@ -1,0 +1,6 @@
+{
+  "name": "explanatory-output-style",
+  "version": "1.0.0",
+  "description": "Adds explanatory tone to agent output",
+  "hooks": ["hooks/session_start.py"]
+}
