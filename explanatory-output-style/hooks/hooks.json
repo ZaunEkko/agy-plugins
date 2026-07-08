@@ -1,16 +1,9 @@
 {
-  "hooks": {
-    "SessionStart": [
+  "explanatory-output-hook": {
+    "PreInvocation": [
       {
-        "matcher": "startup|resume|clear|compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"${PLUGIN_ROOT}/hooks/session_start.py\"",
-            "commandWindows": "python -c \"import os, runpy; runpy.run_path(os.path.join(os.environ['PLUGIN_ROOT'], 'hooks', 'session_start.py'), run_name='__main__')\"",
-            "statusMessage": "Enabling explanatory-output-style"
-          }
-        ]
+        "type": "command",
+        "command": "python -c \"import os, runpy; runpy.run_path(os.path.join(os.environ.get('PLUGIN_ROOT', '.agents'), 'hooks', 'session_start.py'), run_name='__main__')\""
       }
     ]
   }
