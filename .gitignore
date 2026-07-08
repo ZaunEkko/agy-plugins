@@ -1,0 +1,9 @@
+# Local agent/session state
+HANDOFF.local.md
+
+# Local Claude Code project guidance
+CLAUDE.md
+
+# Python cache
+__pycache__/
+*.py[cod]
