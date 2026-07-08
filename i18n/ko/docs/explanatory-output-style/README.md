@@ -4,7 +4,7 @@
 
 `explanatory-output-style` 은 Antigravity 세션에서 설명형 출력 스타일을 활성화하는 Antigravity 플러그인입니다.
 
-Claude Code 공식 [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) 플러그인의 경험을 참고했습니다. `SessionStart` hook 으로 세션 시작 시 추가 지침을 주입하여, 모델이 코드를 작성하거나 수정할 때 현재 코드베이스에 맞는 짧은 Insight 설명을 덧붙이도록 합니다.
+Claude Code 공식 [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) 플러그인의 경험을 참고했습니다. `PreInvocation` hook 으로 추가 지침을 주입하여, 모델이 코드를 작성하거나 수정할 때 현재 코드베이스에 맞는 짧은 Insight 설명을 덧붙이도록 합니다.
 
 ## 언제 사용하면 좋은가
 
@@ -14,12 +14,12 @@ Claude Code 공식 [`explanatory-output-style`](https://github.com/anthropics/cl
 
 ## Claude Code 공식 플러그인과의 관계
 
-Claude Code 공식 플러그인은 `SessionStart` hook 을 사용해 세션 시작 시 설명형 출력 지침을 추가합니다. 이 저장소의 구현은 해당 동작을 Antigravity 플러그인 시스템에 맞게 다시 적용한 것입니다.
+Claude Code 공식 플러그인은 라이프사이클 hook 을 사용해 설명형 출력 지침을 추가합니다. 이 저장소의 구현은 해당 동작을 Antigravity 플러그인 시스템에 맞게 다시 적용한 것입니다.
 
-- Antigravity 플러그인 manifest: `plugins/explanatory-output-style/.agy-plugin/plugin.json`
-- Antigravity hook 설정: `plugins/explanatory-output-style/hooks/hooks.json`
-- Antigravity 가 요구하는 JSON payload 를 출력하는 Python hook: `hookSpecificOutput.additionalContext`
-- 크로스 플랫폼 설치를 위해 Windows / Unix hook command 를 모두 유지
+- 이 저장소의 최상위 플러그인 디렉터리를 사용: `explanatory-output-style/`
+- Antigravity hook 설정: `explanatory-output-style/hooks/hooks.json`
+- Antigravity 가 요구하는 JSON payload 를 출력하는 Python hook: `injectSteps[].ephemeralMessage`
+- 현재 hook 설정은 단일 `command` 를 사용: `python hooks/session_start.py`
 
 ## 주입 후 협업 방식
 
@@ -43,8 +43,8 @@ bullet 줄에는 왼쪽 `|` 만 유지하고 오른쪽 테두리는 추가하지
 ## 설치 및 활성화
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
 ```
 
 command hook 이 포함된 플러그인은 처음 실행하기 전에 Antigravity 에서 검토하고 trust 해야 합니다.
@@ -64,10 +64,10 @@ command hook 이 포함된 플러그인은 처음 실행하기 전에 Antigravit
 저장소 루트에서 실행하세요.
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
-agy plugin list
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
+agy-plugin marketplace list
 ```
 
-처음 세 명령은 Python 문법, hook JSON payload, 플러그인 출력 형식을 검증합니다. `agy plugin list` 는 Antigravity 가 marketplace 플러그인을 발견할 수 있는지 확인하는 데 사용합니다.
+처음 세 명령은 Python 문법, hook JSON payload, 플러그인 출력 형식을 검증합니다. `agy-plugin marketplace list` 는 Antigravity 가 marketplace 플러그인을 발견할 수 있는지 확인하는 데 사용합니다.

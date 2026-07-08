@@ -10,13 +10,13 @@ $commit-push-pr
 $clean-gone
 ```
 
-워크플로 단계는 원본을 따릅니다. Antigravity 전용 차이는 네이티브 skill 구조, 명확한 의도에 따른 자동 선택, `$skill-name` 호출, Antigravity attribution 뿐입니다.
+워크플로 단계는 원본을 따릅니다. Antigravity 전용 차이는 네이티브 skill 구조, 명확한 의도에 따른 자동 선택, `$skill-name` 호출, Gemini bot co-author attribution 뿐입니다.
 
 ## 설치
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add commit-commands@zaunekko
 ```
 
 설치 또는 업데이트 후 새 Antigravity thread 를 여세요.
@@ -33,7 +33,7 @@ agy plugin add commit-commands@zaunekko
 `git status`, `git diff HEAD`, 현재 브랜치, 최근 commit 10개를 확인하고 현재 변경을 stage 한 뒤 하나의 commit 을 만듭니다.
 
 ```text
-Co-authored-by: Antigravity <noreply@openai.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 push 또는 PR 생성을 하지 않으며 변경이 없으면 빈 commit 도 만들지 않습니다.
@@ -55,6 +55,5 @@ GitHub CLI 설치와 로그인, 그리고 `origin` remote 가 필요합니다.
 ## 로컬 검증
 
 ```bash
-python -m unittest discover -s tests
-agy plugin list
+agy-plugin marketplace list
 ```
