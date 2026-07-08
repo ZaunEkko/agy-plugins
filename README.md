@@ -4,11 +4,11 @@
 
 ### 个性化 Antigravity 工作流市场
 
-*把顺手的 plugins、skills、hooks 和提示词风格，打包成别人也能安装的能力*
+*把顺手的 plugins、skills、hooks 和提示词风格，打包成别人也能一键安装的能力*
 
 [简体中文](README.md) · [English](i18n/en/README.md) · [繁體中文](i18n/zh-TW/README.md) · [日本語](i18n/ja/README.md) · [한국어](i18n/ko/README.md)
 
-[![Antigravity](https://img.shields.io/badge/Antigravity-Workflow-111827.svg)](https://developers.openai.com/agy)
+[![Antigravity](https://img.shields.io/badge/Antigravity-Workflow-111827.svg)]()
 [![Marketplace](https://img.shields.io/badge/Marketplace-ZaunEkko-orange.svg)]()
 [![Plugins](https://img.shields.io/badge/Includes-Plugins-blue.svg)]()
 [![Hooks](https://img.shields.io/badge/Supports-Hooks-brightgreen.svg)]()
@@ -20,134 +20,89 @@
 
 ## ✨ 这个仓库是什么
 
-这是一个面向 Antigravity 的个人工作流 marketplace，用来持续沉淀可复用的 Antigravity 个性化能力：插件、skills、hooks、启动上下文、输出风格和开发辅助流程。
+这是一个专为 **Google Antigravity (agy)** 打造的个人工作流 marketplace，用来持续沉淀可复用的 Antigravity 个性化能力。
+本项目摒弃了繁琐的配置文件，完全采用了高度语义化的 `SKILL.md` 和底层生命周期 Hooks 来严格约束 AI 的行为边界与工作流节点。
 
-目标是把平时用着顺手的 Antigravity 配置打包起来，让别人也可以直接安装、启用和复用。
+目标是把平时用着顺手的 Antigravity 配置打包起来，让大家通过 CLI 能够一键安装、静默更新和全局复用。
 
 ## 🧰 收录范围
 
 | 类型 | 说明 |
 |------|------|
-| Plugins | 完整的 Antigravity 插件包，可以包含 manifest、hooks、skills、MCP 配置或其他可安装能力。 |
-| Skills | 可复用的任务工作流，让 Antigravity 在特定场景下按固定方法做事。 |
-| Hooks | 在 Antigravity 生命周期事件中自动运行脚本，例如 session start、tool use、stop 等。 |
-| Presets | 输出风格、协作习惯、项目启动上下文等可以复用的个性化设置。 |
+| Skills | 可复用的任务工作流，让 Antigravity 在特定场景下按固定方法做事（完全摒弃繁琐的 rule.json，依赖原生 markdown 驱动）。 |
+| Hooks | 在 Antigravity 生命周期事件中自动运行脚本，例如 `PreInvocation`，用于全局上下文注入等动态拦截。 |
 
 ## 📦 当前内容
 
 | 插件 | 类型 | 说明 | 文档 |
 |------|------|------|------|
-| explanatory-output-style | Plugin + SessionStart Hook | 把 Claude Code 官方 explanatory-output-style 插件的解释型协作体验适配到 Antigravity。 | [插件文档](docs/explanatory-output-style/README.md) |
-| commit-commands | Plugin + Skills | 按 Anthropic 原版复刻 commit、commit-push-pr 与 force 清理 gone 分支工作流。 | [插件文档](docs/commit-commands/README.md) |
+| explanatory-output-style | Hook | 通过拦截 Session 启动生命周期，把原生的解释型协作体验（Insight 框）自动注入到 Antigravity 中。 | [插件文档](docs/explanatory-output-style/README.md) |
+| commit-commands | Skills | 提供极为严谨的 `commit`、`commit-push-pr` 与 `clean-gone` Git 分支工作流，并强制携带 Antigravity 联合开发者签名。 | [插件文档](docs/commit-commands/README.md) |
 
 ## 🚀 快速开始
 
-首先，您需要全局安装强大的 Antigravity 包管理工具 `agy-plugins-cli`：
+本项目依赖专门构建的 Antigravity 插件管理工具 `agy-plugins-cli`。
 
+### 1. 安装 CLI
+全局安装我们的包管理器：
 ```bash
 npm install -g agy-plugins-cli
 ```
 
-安装完成后，您可以直接使用自带的交互式面板浏览并批量安装插件：
-
+### 2. 绑定当前仓库并安装插件
+通过 CLI 沉浸式安装您需要的插件：
 ```bash
-# 1. 绑定您的本地环境到此仓库
+# 绑定 ZaunEkko 的本插件仓库
 agy-plugin marketplace add ZaunEkko/agy-plugins
 
-# 2. 沉浸式多选并安装插件
+# 启动交互式 TUI 面板，一键勾选所需插件（如 explanatory-output-style）
 agy-plugin marketplace list
 ```
 
-如果不想使用交互式面板，也可以用传统方式单点安装：
+如果不想使用交互式面板，也可以用传统的命令式语法（支持 `@namespace` 定位）：
 ```bash
 agy-plugin add explanatory-output-style@zaunekko
 agy-plugin add commit-commands@zaunekko
 ```
 
-包含 command hook 的插件首次运行前需要在 Antigravity 中 review 并 trust：
+## 🎯 插件使用方式
 
-```text
-/hooks
-```
+**explanatory-output-style**：
+安装后全局生效。每次与 Antigravity 对话时，它都会自动在底层触发 Hook，并以精美的 `+--- ★ Insight ---+` 风格向您解释代码逻辑，非常适合代码学习与架构探讨。
 
-## 🎯 使用方式
+**commit-commands**：
+在终端直接通过 slash 命令呼叫，Antigravity 将严格遵循工作流边界执行：
+- `$commit`: 一键本地提交并签名。
+- `$commit-push-pr`: 开发完毕后自动开新分支、提交、推送并使用 `gh` CLI 提 PR。
+- `$clean-gone`: 自动检索本地标记为 `[gone]` 的上游已删分支，并暴力清场工作区。
 
-安装并信任后，新开一个 Antigravity thread。当前插件会在会话启动阶段注入额外上下文：
+*(注：涉及危险操作的 Skill（如 `clean-gone`）在删除分支前必须由用户人工审计确认。)*
 
-```text
-Antigravity Session Start
-        ↓
-explanatory-output-style
-        ↓
-additionalContext 注入
-        ↓
-Antigravity 使用解释型输出风格协作
-```
+## 📚 插件架构
 
-适合这些场景：
-
-- 希望 Antigravity 不只给结果，也解释实现选择。
-- 希望把常用提示词变成可安装插件。
-- 希望给团队或朋友共享同一套 Antigravity 工作方式。
-
-`commit-commands` 提供三个 Git 工作流 skill。Antigravity 可以根据“提交改动”“明确要求发布 PR”“清理 gone 分支”等明确意图自动选择，也可以使用 `$` 强制调用：
-
-```text
-$commit
-$commit-push-pr
-$clean-gone
-```
-
-这些 skill 不会仅因工作完成就擅自执行副作用。工作流步骤以 Anthropic 原版为准；其中 `clean-gone` 会像原版一样执行 `git worktree remove --force` 和 `git branch -D`，调用前必须先审查仓库状态。
-
-## 📚 插件文档
-
-每个插件单独维护文档，根 README 只保留入口导航：
-
-- [explanatory-output-style](docs/explanatory-output-style/README.md)：解释型输出风格插件说明、安装、hook 信任方式和本地验证命令。
-- [commit-commands](docs/commit-commands/README.md)：提交、发布 PR、分支清理、安全边界和本地验证说明。
-
-## 🏗️ 仓库结构
+本仓库采用纯粹的 Antigravity 兼容结构：
 
 ```text
 agy-plugins/
-├── .agents/plugins/marketplace.json
-├── .github/workflows/ci.yml
-├── docs/<plugin-name>/README.md
-├── plugins/<plugin-name>/.agy-plugin/plugin.json
-├── plugins/<plugin-name>/hooks/
-├── plugins/<plugin-name>/skills/<skill-name>/SKILL.md
-├── i18n/<language>/docs/<plugin-name>/README.md
-├── tests/
-└── README.md
+├── commit-commands/
+│   └── skills/
+│       ├── commit/SKILL.md
+│       ├── commit-push-pr/SKILL.md
+│       └── clean-gone/SKILL.md
+├── explanatory-output-style/
+│   ├── hooks/
+│   │   ├── hooks.json
+│   │   └── session_start.py
+│   └── skills/
+│       └── explanatory-output.md
 ```
-
-## 🧭 Roadmap
-
-| 类型 | 方向 | 状态 |
-|------|------|------|
-| 输出风格 | explanatory-output-style | ✅ 已提供 |
-| 项目上下文 | 自动注入项目约定、目录说明、常用命令 | 🧪 计划中 |
-| Review 风格 | 固定代码审查口径和检查清单 | 🧪 计划中 |
-| 开发辅助 | commit-commands Git 工作流 | ✅ 已提供 |
-| Hook 自动化 | session/tool/stop 生命周期脚本 | 🧪 计划中 |
-
-## 🧪 本地验证
-
-```bash
-agy plugin list
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest discover -s tests
-```
+所有的工作流逻辑都死死地钉在 `SKILL.md` 里，没有任何过度设计的周边配置文件！
 
 ## ⚠️ Trust & Safety
 
-- 安装前看清插件说明。
-- 在 `/hooks` 中 review command hook。
-- 改动 hook 后重新 trust。
-- 触发会提交、推送或删除分支的 skill 前先审查当前仓库状态。
-- 不要把 API key、token、密码或机器专属路径写进 hook 输出。
+- 包含 command hook（如 Python 脚本）的插件在首次安装后，请留意本地安全提示。
+- 切勿在 Hook 中输出任何明文敏感 Token。
+- 触发自动提交或分支清理操作前，确保当前工作区没有未保存的贵重代码。
 
 ## 📄 许可证
 
@@ -158,9 +113,3 @@ python -m unittest discover -s tests
 - [Contributing](CONTRIBUTING.md)
 - [Security Policy](SECURITY.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
-
-<div align="center">
-
-**Made for reusable Antigravity workflows by ZaunEkko**
-
-</div>
