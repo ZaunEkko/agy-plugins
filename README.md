@@ -42,10 +42,26 @@
 
 ## 🚀 快速开始
 
+首先，您需要全局安装强大的 Antigravity 包管理工具 `agy-plugins-cli`：
+
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
-agy plugin add commit-commands@zaunekko
+npm install -g agy-plugins-cli
+```
+
+安装完成后，您可以直接使用自带的交互式面板浏览并批量安装插件：
+
+```bash
+# 1. 绑定您的本地环境到此仓库
+agy-plugin marketplace add ZaunEkko/agy-plugins
+
+# 2. 沉浸式多选并安装插件
+agy-plugin marketplace list
+```
+
+如果不想使用交互式面板，也可以用传统方式单点安装：
+```bash
+agy-plugin add explanatory-output-style@zaunekko
+agy-plugin add commit-commands@zaunekko
 ```
 
 包含 command hook 的插件首次运行前需要在 Antigravity 中 review 并 trust：
