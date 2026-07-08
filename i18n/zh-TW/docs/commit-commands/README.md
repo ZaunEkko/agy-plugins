@@ -10,13 +10,13 @@ $commit-push-pr
 $clean-gone
 ```
 
-工作流程步驟以原版為準。Antigravity 差異只限於原生 skill 結構、明確意圖的自動選擇、`$skill-name` 入口與 Antigravity attribution。
+工作流程步驟以原版為準。Antigravity 差異只限於原生 skill 結構、明確意圖的自動選擇、`$skill-name` 入口與 Gemini bot co-author attribution。
 
 ## 安裝
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add commit-commands@zaunekko
 ```
 
 安裝或更新後請開啟新的 Antigravity thread。
@@ -33,7 +33,7 @@ agy plugin add commit-commands@zaunekko
 檢查 `git status`、`git diff HEAD`、目前分支與最近十筆提交，暫存目前改動並建立一個 commit，加入：
 
 ```text
-Co-authored-by: Antigravity <noreply@openai.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 不會推送、建立 PR 或在沒有改動時建立空 commit。
@@ -55,6 +55,5 @@ Co-authored-by: Antigravity <noreply@openai.com>
 ## 本機驗證
 
 ```bash
-python -m unittest discover -s tests
-agy plugin list
+agy-plugin marketplace list
 ```

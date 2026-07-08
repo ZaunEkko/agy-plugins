@@ -20,15 +20,15 @@
 
 | プラグイン | 種類 | 説明 | ドキュメント |
 |------------|------|------|--------------|
-| explanatory-output-style | Plugin + SessionStart Hook | Claude Code 公式の explanatory-output-style 体験を Antigravity に適配します。 | [プラグイン docs](docs/explanatory-output-style/README.md) |
+| explanatory-output-style | Plugin + PreInvocation Hook | Claude Code 公式の explanatory-output-style 体験を Antigravity に適配します。 | [プラグイン docs](docs/explanatory-output-style/README.md) |
 | commit-commands | Plugin + Skills | Anthropic 原版の commit、commit-push-pr、gone ブランチの force cleanup を提供します。 | [プラグイン docs](docs/commit-commands/README.md) |
 
 ## 🚀 クイックスタート
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
+agy-plugin add commit-commands@zaunekko
 ```
 
 command hook を含むプラグインは、初回利用前に Antigravity で確認して trust してください。

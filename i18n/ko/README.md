@@ -20,15 +20,15 @@
 
 | 플러그인 | 유형 | 설명 | 문서 |
 |----------|------|------|------|
-| explanatory-output-style | Plugin + SessionStart Hook | Claude Code 공식 explanatory-output-style 경험을 Antigravity에 맞게 적용합니다. | [플러그인 문서](docs/explanatory-output-style/README.md) |
+| explanatory-output-style | Plugin + PreInvocation Hook | Claude Code 공식 explanatory-output-style 경험을 Antigravity에 맞게 적용합니다. | [플러그인 문서](docs/explanatory-output-style/README.md) |
 | commit-commands | Plugin + Skills | Anthropic 원본의 commit, commit-push-pr, gone 브랜치 force 정리 흐름을 제공합니다. | [플러그인 문서](docs/commit-commands/README.md) |
 
 ## 🚀 빠른 시작
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
+agy-plugin add commit-commands@zaunekko
 ```
 
 command hook 이 포함된 플러그인은 처음 사용하기 전에 Antigravity에서 검토하고 trust 해야 합니다.

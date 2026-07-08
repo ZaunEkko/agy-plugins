@@ -4,7 +4,7 @@
 
 `explanatory-output-style` 是一個 Antigravity 插件，用來在 Antigravity 會話中啟用解釋型輸出風格。
 
-它參考 Claude Code 官方 [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) 插件的功能體驗：透過 `SessionStart` hook 在會話開始時加入額外指引，讓模型在寫程式碼或修改程式碼時補充簡短、貼近目前程式碼庫的 Insight 說明。
+它參考 Claude Code 官方 [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) 插件的功能體驗：透過 `PreInvocation` hook 注入額外指引，讓模型在寫程式碼或修改程式碼時補充簡短、貼近目前程式碼庫的 Insight 說明。
 
 ## 適合什麼場景
 
@@ -14,12 +14,12 @@
 
 ## 和 Claude Code 官方插件的關係
 
-Claude Code 官方插件使用 `SessionStart` hook 在會話開始時加入解釋型輸出指引。這個倉庫中的實作面向 Antigravity 插件系統重新適配：
+Claude Code 官方插件使用會話生命週期 hook 加入解釋型輸出指引。這個倉庫中的實作面向 Antigravity 插件系統重新適配：
 
-- 使用 Antigravity 插件 manifest：`plugins/explanatory-output-style/.agy-plugin/plugin.json`
-- 使用 Antigravity hook 設定：`plugins/explanatory-output-style/hooks/hooks.json`
-- 使用 Python hook 輸出 Antigravity 需要的 JSON payload：`hookSpecificOutput.additionalContext`
-- 保留 Windows / Unix 兩套 hook command，方便跨平台安裝
+- 使用目前倉庫的頂層插件目錄：`explanatory-output-style/`
+- 使用 Antigravity hook 設定：`explanatory-output-style/hooks/hooks.json`
+- 使用 Python hook 輸出 Antigravity 需要的 JSON payload：`injectSteps[].ephemeralMessage`
+- 目前 hook 設定使用單一 `command`：`python hooks/session_start.py`
 
 ## 注入後的協作效果
 
@@ -43,8 +43,8 @@ bullet 行只保留左側 `|`，不加入右側邊框，避免終端自動換行
 ## 安裝與啟用
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
 ```
 
 包含 command hook 的插件首次執行前需要在 Antigravity 中審查並信任：
@@ -64,10 +64,10 @@ agy plugin add explanatory-output-style@zaunekko
 從倉庫根目錄執行：
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
-agy plugin list
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
+agy-plugin marketplace list
 ```
 
-前三條分別驗證 Python 語法、hook JSON payload 和插件輸出格式；`agy plugin list` 用於確認 Antigravity 能發現 marketplace 插件。
+前三條分別驗證 Python 語法、hook JSON payload 和插件輸出格式；`agy-plugin marketplace list` 用於確認 Antigravity 能發現 marketplace 插件。

@@ -14,7 +14,7 @@ Adapt Anthropic's `/commit-push-pr` workflow as a native Antigravity skill.
 3. Stage the current changes and create exactly one commit with an appropriate message. Append:
 
 ```text
-Co-authored-by: Antigravity <noreply@google.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 4. Push the current branch to `origin`.

@@ -10,13 +10,13 @@ $commit-push-pr
 $clean-gone
 ```
 
-Workflow steps follow the original. Antigravity-specific differences are limited to native skill packaging, explicit-intent implicit selection, `$skill-name` invocation, and Antigravity attribution.
+Workflow steps follow the original. Antigravity-specific differences are limited to native skill packaging, explicit-intent implicit selection, `$skill-name` invocation, and Gemini bot co-author attribution.
 
 ## Installation
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add commit-commands@zaunekko
 ```
 
 Start a new Antigravity thread after installing or updating so the new skill metadata is loaded.
@@ -33,7 +33,7 @@ Start a new Antigravity thread after installing or updating so the new skill met
 Inspects `git status`, `git diff HEAD`, the current branch, and the latest ten commits. It stages the current changes and creates exactly one commit with:
 
 ```text
-Co-authored-by: Antigravity <noreply@openai.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 It does not push or open a PR, and it does not create an empty commit when there are no changes.
@@ -55,6 +55,5 @@ This deliberately matches the original destructive behavior: it does not fetch, 
 ## Local validation
 
 ```bash
-python -m unittest discover -s tests
-agy plugin list
+agy-plugin marketplace list
 ```

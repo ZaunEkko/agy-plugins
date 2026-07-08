@@ -9,28 +9,28 @@
 このリポジトリは Git Flow を使用します。
 
 - `main`: 安定リリースブランチ。
-- `dev`: 日常的な統合ブランチ。
-- `feature/*`: 新機能、ドキュメント、プラグイン変更。`dev` から分岐し、Pull Request で `dev` に戻します。
-- `release/*`: リリース準備。`dev` から分岐し、完了後 `main` と `dev` にマージします。
-- `hotfix/*`: 緊急修正。`main` から分岐し、完了後 `main` と `dev` にマージします。
+- `develop`: 日常的な統合ブランチ。
+- `feature/*`: 新機能、ドキュメント、プラグイン変更。`develop` から分岐し、Pull Request で `develop` に戻します。
+- `release/*`: リリース準備。`develop` から分岐し、完了後 `main` と `develop` にマージします。
+- `hotfix/*`: 緊急修正。`main` から分岐し、完了後 `main` と `develop` にマージします。
 
-`main` または `dev` へ直接 push しないでください。両方のブランチは保護されており、変更は Pull Request と必須チェックを通してマージします。
+`main` または `develop` へ直接 push しないでください。両方のブランチは保護されており、変更は Pull Request と必須チェックを通してマージします。
 
 ## リポジトリ構成
 
 新しいプラグインは基本的に次の構成にしてください。
 
 ```text
-plugins/<plugin-name>/
-├── .agy-plugin/
-│   └── plugin.json
+<plugin-name>/
+├── skills/
+├── hooks/
 └── ...
 
 docs/<plugin-name>/
 └── README.md
 ```
 
-- `plugins/<plugin-name>/` にはインストール可能なプラグイン内容を置きます。
+- `<plugin-name>/` にはインストール可能なプラグイン内容を置き、プラグインの内容に応じて `skills/` や `hooks/` などのサブディレクトリを使います。
 - `docs/<plugin-name>/README.md` にはインストール者・利用者向けの説明を置きます。
 - ルート `README.md` はリポジトリ概要とプラグインドキュメントへの導線に留めます。
 - ローカルの Claude Code 初期化ファイル `CLAUDE.md` はコミットしないでください。`.gitignore` で無視されています。
@@ -47,7 +47,7 @@ docs/<plugin-name>/
 
 - Python hook の変更: `python -m py_compile <hook-script>` を実行し、hook スクリプトを直接実行して有効な JSON を出力することを確認します。
 - hook 設定の変更: `hooks.json` が有効な JSON であることを確認し、command / commandWindows の安全性、可読性、クロスプラットフォーム性を確認します。
-- manifest の変更: `.agy-plugin/plugin.json` が有効な JSON であり、プラグイン名、バージョン、説明、marketplace エントリと一致することを確認します。
+- manifest の変更（プラグインに manifest が含まれる場合）: manifest が有効な JSON であり、プラグイン名、バージョン、説明、marketplace エントリと一致することを確認します。
 - 振る舞いの変更: 対象プラグインのテストを実行します。テストがない場合は焦点を絞ったテストを追加するか、PR で追加しない理由を説明します。
 - ドキュメント変更: リンク、パス、インストールコマンドを確認します。
 - 新規プラグイン: marketplace がプラグインを検出できることを確認し、インストールと trust 手順をドキュメントに記載します。
@@ -55,9 +55,9 @@ docs/<plugin-name>/
 現在の `explanatory-output-style` プラグインのメンテナー検証例:
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
 ```
 
 これらのコマンドはこのプラグインの例です。新しいプラグインは、自身のドキュメントまたはテストで検証方法を定義してください。

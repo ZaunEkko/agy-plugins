@@ -22,15 +22,15 @@ The goal is to package useful Antigravity configurations so other people can ins
 
 | Plugin | Type | Description | Docs |
 |--------|------|-------------|------|
-| explanatory-output-style | Plugin + SessionStart Hook | Ports the official Claude Code explanatory-output-style experience to Antigravity. | [Plugin docs](docs/explanatory-output-style/README.md) |
+| explanatory-output-style | Plugin + PreInvocation Hook | Ports the official Claude Code explanatory-output-style experience to Antigravity. | [Plugin docs](docs/explanatory-output-style/README.md) |
 | commit-commands | Plugin + Skills | Matches Anthropic's commit, commit-push-pr, and force cleanup workflows for gone branches. | [Plugin docs](docs/commit-commands/README.md) |
 
 ## 🚀 Quick start
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
+agy-plugin add commit-commands@zaunekko
 ```
 
 Plugins with command hooks must be reviewed and trusted in Antigravity before first use:
@@ -47,10 +47,10 @@ Plugins with command hooks must be reviewed and trusted in Antigravity before fi
 ## 🧪 Local validation
 
 ```bash
-agy plugin list
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest discover -s tests
+agy-plugin marketplace list
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
 ```
 
 ## ⚠️ Trust & Safety
