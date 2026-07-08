@@ -67,7 +67,7 @@ Preserve the explicit triggering boundaries: `$commit` is commit-only, `$commit-
 
 `explanatory-output-style/hooks/hooks.json` registers a `PreInvocation` command hook that runs `python hooks/session_start.py` relative to the installed plugin. The Python hook prints JSON containing an `injectSteps` array with an `ephemeralMessage` that injects explanatory output-style instructions.
 
-When changing hook behavior, keep the hook output machine-readable JSON and update plugin docs to tell users what to review/trust in `/hooks`.
+When changing hook behavior, keep the hook output machine-readable JSON. Native hooks installed via `agy plugin install` are dynamically mounted and do not appear in the TUI `/hooks` menu. Use `agy plugin disable <plugin>` to manage them.
 
 ### Documentation is part of the product surface
 
@@ -84,4 +84,4 @@ Follow the standard Git Flow model for branch work:
 - `hotfix/<slug>` branches start from `main`, then merge into both `main` and `develop`.
 - Do not commit or push directly to `main` or `develop`; use PRs and wait for required checks.
 
-The PR template asks for language, scope, validation commands per affected plugin, and hook/security impact. For hook or command changes, include the concrete validation run and call out whether users must re-review/re-trust the hook with `/hooks`.
+The PR template asks for language, scope, validation commands per affected plugin, and hook/security impact. For hook or command changes, include the concrete validation run and explain any change in behavior.
