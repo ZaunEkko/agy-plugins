@@ -17,7 +17,7 @@ Adapt Anthropic's `/commit` workflow as a native Antigravity skill.
 6. Create exactly one commit with an appropriate message and append:
 
 ```text
-Co-authored-by: Antigravity <noreply@google.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 7. Report the resulting commit and status.
