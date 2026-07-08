@@ -10,13 +10,13 @@ $commit-push-pr
 $clean-gone
 ```
 
-ワークフロー手順は原版に従います。Antigravity 固有の差分はネイティブ skill 構造、明示的な意図による自動選択、`$skill-name` 呼び出し、Antigravity attribution だけです。
+ワークフロー手順は原版に従います。Antigravity 固有の差分はネイティブ skill 構造、明示的な意図による自動選択、`$skill-name` 呼び出し、Gemini bot co-author attribution だけです。
 
 ## インストール
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add commit-commands@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add commit-commands@zaunekko
 ```
 
 インストールまたは更新後は、新しい Antigravity thread を開いてください。
@@ -33,7 +33,7 @@ agy plugin add commit-commands@zaunekko
 `git status`、`git diff HEAD`、現在のブランチ、最近 10 件の commit を確認し、現在の変更を stage して 1 つの commit を作成します。
 
 ```text
-Co-authored-by: Antigravity <noreply@openai.com>
+Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
 push や PR 作成は行わず、変更がない場合は空 commit も作成しません。
@@ -55,6 +55,5 @@ GitHub CLI のインストールとログイン、および `origin` remote が�
 ## ローカル検証
 
 ```bash
-python -m unittest discover -s tests
-agy plugin list
+agy-plugin marketplace list
 ```

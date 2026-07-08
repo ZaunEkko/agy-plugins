@@ -4,7 +4,7 @@
 
 `explanatory-output-style` is a Antigravity plugin that enables an explanatory output style in Antigravity sessions.
 
-It follows the experience of Claude Code's official [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) plugin: a `SessionStart` hook injects extra guidance at the beginning of a session so the model adds short, codebase-specific Insight notes when writing or changing code.
+It follows the experience of Claude Code's official [`explanatory-output-style`](https://github.com/anthropics/claude-code/tree/main/plugins/explanatory-output-style) plugin: a `PreInvocation` hook injects extra guidance so the model adds short, codebase-specific Insight notes when writing or changing code.
 
 ## When to use it
 
@@ -14,12 +14,12 @@ It follows the experience of Claude Code's official [`explanatory-output-style`]
 
 ## Relationship to the official Claude Code plugin
 
-The official Claude Code plugin uses a `SessionStart` hook to add explanatory output guidance at session start. This repository adapts that behavior for the Antigravity plugin system:
+The official Claude Code plugin uses a lifecycle hook to add explanatory output guidance. This repository adapts that behavior for the Antigravity plugin system:
 
-- Antigravity plugin manifest: `plugins/explanatory-output-style/.agy-plugin/plugin.json`
-- Antigravity hook configuration: `plugins/explanatory-output-style/hooks/hooks.json`
-- Python hook that emits the JSON payload Antigravity expects: `hookSpecificOutput.additionalContext`
-- Separate Windows / Unix hook commands for cross-platform installation
+- Uses this repository's top-level plugin directory: `explanatory-output-style/`
+- Antigravity hook configuration: `explanatory-output-style/hooks/hooks.json`
+- Python hook that emits the JSON payload Antigravity expects: `injectSteps[].ephemeralMessage`
+- Current hook configuration uses a single `command`: `python hooks/session_start.py`
 
 ## Collaboration behavior after injection
 
@@ -43,8 +43,8 @@ Bullet lines keep only the left `|` and do not add a right border, which prevent
 ## Installation and enablement
 
 ```bash
-agy plugin marketplace add ZaunEkko/agy-plugins
-agy plugin add explanatory-output-style@zaunekko
+agy-plugin marketplace add ZaunEkko/agy-plugins
+agy-plugin add explanatory-output-style@zaunekko
 ```
 
 Before first use, review and trust command hooks in Antigravity:
@@ -64,10 +64,10 @@ Review:
 Run from the repository root:
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
-agy plugin list
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
+agy-plugin marketplace list
 ```
 
-The first three commands validate Python syntax, hook JSON payload, and plugin output format. `agy plugin list` confirms Antigravity can discover the marketplace plugin.
+The first three commands validate Python syntax, hook JSON payload, and plugin output format. `agy-plugin marketplace list` confirms Antigravity can discover the marketplace plugin.

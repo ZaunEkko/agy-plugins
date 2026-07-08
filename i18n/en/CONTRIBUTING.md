@@ -9,28 +9,28 @@ Thank you for your interest in `agy-plugins`. This repository maintains Antigrav
 This repository uses Git Flow:
 
 - `main`: stable release branch.
-- `dev`: daily integration branch.
-- `feature/*`: features, documentation, and plugin changes. Branch from `dev`, then merge back through a Pull Request.
-- `release/*`: release preparation. Branch from `dev`, then merge into both `main` and `dev`.
-- `hotfix/*`: urgent fixes. Branch from `main`, then merge into both `main` and `dev`.
+- `develop`: daily integration branch.
+- `feature/*`: features, documentation, and plugin changes. Branch from `develop`, then merge back through a Pull Request.
+- `release/*`: release preparation. Branch from `develop`, then merge into both `main` and `develop`.
+- `hotfix/*`: urgent fixes. Branch from `main`, then merge into both `main` and `develop`.
 
-Do not push directly to `main` or `dev`. Both branches are protected; changes should be merged through Pull Requests after required checks pass.
+Do not push directly to `main` or `develop`. Both branches are protected; changes should be merged through Pull Requests after required checks pass.
 
 ## Repository structure
 
 New plugins should generally follow this layout:
 
 ```text
-plugins/<plugin-name>/
-├── .agy-plugin/
-│   └── plugin.json
+<plugin-name>/
+├── skills/
+├── hooks/
 └── ...
 
 docs/<plugin-name>/
 └── README.md
 ```
 
-- `plugins/<plugin-name>/` contains installable plugin files.
+- `<plugin-name>/` contains installable plugin files; use subdirectories such as `skills/` and `hooks/` according to the plugin surface.
 - `docs/<plugin-name>/README.md` contains installer- and user-facing plugin documentation.
 - The root `README.md` should stay as a repository overview and plugin documentation router.
 - Do not commit the local Claude Code initialization file `CLAUDE.md`; it is ignored by `.gitignore`.
@@ -47,7 +47,7 @@ General rules:
 
 - Python hook changes: run `python -m py_compile <hook-script>` and execute the hook script directly to confirm it emits valid JSON.
 - Hook configuration changes: confirm `hooks.json` is valid JSON and review command / commandWindows for safety, readability, and cross-platform behavior.
-- Manifest changes: confirm `.agy-plugin/plugin.json` is valid JSON and matches the plugin name, version, description, and marketplace entry.
+- Manifest changes, when a plugin includes a manifest: confirm it is valid JSON and matches the plugin name, version, description, and marketplace entry.
 - Behavior changes: run that plugin's tests. If tests do not exist, add focused tests or explain why they were not added in the PR.
 - Documentation changes: check links, paths, and installation commands.
 - New plugins: confirm the marketplace can discover the plugin, and document installation and trust steps.
@@ -55,9 +55,9 @@ General rules:
 Current maintainer validation example for `explanatory-output-style`:
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
 ```
 
 These commands are examples for that plugin only. New plugins should define their own validation steps in documentation or tests.

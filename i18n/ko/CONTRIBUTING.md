@@ -9,28 +9,28 @@
 이 저장소는 Git Flow 를 사용합니다.
 
 - `main`: 안정 릴리스 브랜치.
-- `dev`: 일상 통합 브랜치.
-- `feature/*`: 기능, 문서, 플러그인 변경. `dev` 에서 분기하고 Pull Request 로 `dev` 에 병합합니다.
-- `release/*`: 릴리스 준비. `dev` 에서 분기하고 완료 후 `main` 과 `dev` 에 병합합니다.
-- `hotfix/*`: 긴급 수정. `main` 에서 분기하고 완료 후 `main` 과 `dev` 에 병합합니다.
+- `develop`: 일상 통합 브랜치.
+- `feature/*`: 기능, 문서, 플러그인 변경. `develop` 에서 분기하고 Pull Request 로 `develop` 에 병합합니다.
+- `release/*`: 릴리스 준비. `develop` 에서 분기하고 완료 후 `main` 과 `develop` 에 병합합니다.
+- `hotfix/*`: 긴급 수정. `main` 에서 분기하고 완료 후 `main` 과 `develop` 에 병합합니다.
 
-`main` 또는 `dev` 에 직접 push 하지 마세요. 두 브랜치는 보호되어 있으며, 변경은 Pull Request 와 필수 검사를 거쳐 병합해야 합니다.
+`main` 또는 `develop` 에 직접 push 하지 마세요. 두 브랜치는 보호되어 있으며, 변경은 Pull Request 와 필수 검사를 거쳐 병합해야 합니다.
 
 ## 저장소 구조
 
 새 플러그인은 일반적으로 다음 구조를 따릅니다.
 
 ```text
-plugins/<plugin-name>/
-├── .agy-plugin/
-│   └── plugin.json
+<plugin-name>/
+├── skills/
+├── hooks/
 └── ...
 
 docs/<plugin-name>/
 └── README.md
 ```
 
-- `plugins/<plugin-name>/` 에는 설치 가능한 플러그인 파일을 둡니다.
+- `<plugin-name>/` 에는 설치 가능한 플러그인 파일을 두고, 플러그인 기능에 따라 `skills/`, `hooks/` 같은 하위 디렉터리를 사용합니다.
 - `docs/<plugin-name>/README.md` 에는 설치자와 사용자를 위한 플러그인 문서를 둡니다.
 - 루트 `README.md` 는 저장소 개요와 플러그인 문서 라우팅만 담당합니다.
 - 로컬 Claude Code 초기화 파일 `CLAUDE.md` 는 커밋하지 마세요. `.gitignore` 에서 무시됩니다.
@@ -47,7 +47,7 @@ docs/<plugin-name>/
 
 - Python hook 변경: `python -m py_compile <hook-script>` 를 실행하고 hook 스크립트를 직접 실행해 유효한 JSON 을 출력하는지 확인합니다.
 - hook 설정 변경: `hooks.json` 이 유효한 JSON 인지 확인하고 command / commandWindows 의 안전성, 가독성, 크로스 플랫폼 동작을 검토합니다.
-- manifest 변경: `.agy-plugin/plugin.json` 이 유효한 JSON 이며 플러그인 이름, 버전, 설명, marketplace 항목과 일치하는지 확인합니다.
+- manifest 변경(플러그인에 manifest 가 포함된 경우): manifest 가 유효한 JSON 이며 플러그인 이름, 버전, 설명, marketplace 항목과 일치하는지 확인합니다.
 - 동작 변경: 해당 플러그인의 테스트를 실행합니다. 테스트가 없다면 초점을 맞춘 테스트를 추가하거나 PR 에 추가하지 않은 이유를 설명합니다.
 - 문서 변경: 링크, 경로, 설치 명령이 정확한지 확인합니다.
 - 새 플러그인: marketplace 가 플러그인을 발견할 수 있는지 확인하고 설치 및 trust 단계를 문서화합니다.
@@ -55,9 +55,9 @@ docs/<plugin-name>/
 현재 `explanatory-output-style` 플러그인의 관리자 검증 예시:
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
 ```
 
 이 명령은 해당 플러그인의 예시일 뿐입니다. 새 플러그인은 자체 문서나 테스트에서 검증 방법을 정의해야 합니다.
