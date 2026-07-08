@@ -1,23 +1,29 @@
 ---
-name: commit-commands
-description: A skill to assist with writing semantic Git commit messages. Includes automatic signatures.
+name: commit
+description: Create exactly one local Git commit from the current staged and unstaged changes, using recent history for message style and adding Antigravity co-author attribution. Use when the user explicitly asks to commit, save, record, or check in current changes. Do not use merely because implementation finished, and do not push or open a pull request.
 ---
 
-# Commit Commands Skill
+# Commit
 
-When a user asks you to write a commit message or commit their changes, you should format the commit message according to the `commit.rule.json`.
+Adapt Anthropic's `/commit` workflow as a native Antigravity skill.
 
-**Important Requirements:**
-1. Analyze the `git diff` or the changes provided by the user to understand what has been modified.
-2. Formulate a short, descriptive subject line following conventional commits format (e.g. `feat:`, `fix:`, `refactor:`, `docs:`).
-3. Provide a clear and concise body explaining the context and the reason for the change, if necessary.
-4. **Mandatory**: As per the rules, always end the commit message with `Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>`.
+## Workflow
 
-Example format:
+1. Inspect `git status`.
+2. Inspect staged and unstaged changes with `git diff HEAD`.
+3. Inspect the current branch with `git branch --show-current`.
+4. Inspect the latest ten commits with `git log --oneline -10` and match the repository's commit-message style.
+5. Based on the current changes, stage the relevant files.
+6. Create exactly one commit with an appropriate message and append:
+
+```text
+Co-authored-by: Antigravity <noreply@google.com>
 ```
-feat: add marketplace source management
 
-Implemented the config manager to save marketplace repositories locally.
+7. Report the resulting commit and status.
 
-Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
-```
+## Boundaries
+
+- If there are no changes to commit, report that instead of creating an empty commit.
+- Avoid staging obvious secrets such as `.env` or credential files.
+- Do not push, open a pull request, amend an existing commit, or perform unrelated work.
