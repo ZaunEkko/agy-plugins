@@ -3,7 +3,7 @@
     "PreInvocation": [
       {
         "type": "command",
-        "command": "python -c \"import os, runpy; runpy.run_path(os.path.join(os.environ.get('PLUGIN_ROOT', '.agents'), 'hooks', 'session_start.py'), run_name='__main__')\""
+        "command": "python hooks/session_start.py"
       }
     ]
   }
