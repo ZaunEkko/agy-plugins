@@ -1,0 +1,105 @@
+name: Bug report / 问题反馈 / 問題回報 / バグ報告 / 버그 제보
+description: Report plugin installation, runtime, or hook behavior issues. / 报告插件安装、运行或 hook 行为问题。
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not paste API keys, tokens, passwords, private keys, or other sensitive information.
+        请不要在 issue 中粘贴 API key、token、密码、私钥或其他敏感信息。
+        請不要在 issue 中貼上 API key、token、密碼、私鑰或其他敏感資訊。
+        API key、token、パスワード、秘密鍵、その他の機密情報を issue に貼り付けないでください。
+        API key, token, 비밀번호, 개인 키 또는 기타 민감한 정보를 issue 에 붙여넣지 마세요。
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language / 语言 / 言語 / 언어
+      description: Select the language you will use. / 请选择你要使用的语言。 / 請選擇你要使用的語言。 / 使用する言語を選択してください。 / 사용할 언어를 선택하세요。
+      options:
+        - 简体中文
+        - English
+        - 繁體中文
+        - 日本語
+        - 한국어
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin / 插件 / プラグイン / 플러그인
+      description: |
+        Name of the plugin with the issue, for example explanatory-output-style.
+        出问题的插件名称，例如 explanatory-output-style。
+        出問題的插件名稱，例如 explanatory-output-style。
+        問題が発生したプラグイン名。例: explanatory-output-style。
+        문제가 발생한 플러그인 이름입니다. 예: explanatory-output-style。
+      placeholder: explanatory-output-style
+    validations:
+      required: true
+  - type: input
+    id: agy-version
+    attributes:
+      label: Antigravity version / Antigravity 版本 / Antigravity バージョン / Antigravity 버전
+      description: If you are not sure, write "not sure". / 如果不确定，可以填写“不确定”。 / 如果不確定，可以填寫「不確定」。 / 不明な場合は「不明」と書いてください。 / 확실하지 않다면 "잘 모르겠습니다" 라고 적어 주세요。
+      placeholder: agy --version
+    validations:
+      required: false
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system / 操作系统 / 作業系統 / OS / 운영체제
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps / 复现步骤 / 復現步驟 / 再現手順 / 재현 단계
+      description: |
+        Write the steps from installation to triggering the issue.
+        请写出从安装到触发问题的步骤。
+        請寫出從安裝到觸發問題的步驟。
+        インストールから問題発生までの手順を書いてください。
+        설치부터 문제가 발생하기까지의 단계를 적어 주세요。
+      placeholder: |
+        1. agy plugin marketplace add ...
+        2. agy plugin add ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result / 期望结果 / 預期結果 / 期待する結果 / 예상 결과
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result / 实际结果 / 實際結果 / 実際の結果 / 실제 결과
+      description: |
+        You may paste errors, but remove sensitive information first.
+        可以粘贴错误信息，但请先移除敏感信息。
+        可以貼上錯誤資訊，但請先移除敏感資訊。
+        エラー情報を貼り付けても構いませんが、先に機密情報を削除してください。
+        오류 정보를 붙여넣어도 되지만 먼저 민감한 정보를 제거해 주세요。
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context / 其他信息 / 其他資訊 / 補足情報 / 추가 정보
+      description: |
+        Relevant logs, screenshots, or troubleshooting you already tried.
+        相关日志、截图或你已经尝试过的排查方式。
+        相關日誌、截圖或你已經嘗試過的排查方式。
+        関連ログ、スクリーンショット、または試した調査内容。
+        관련 로그, 스크린샷 또는 이미 시도한 문제 해결 방법。
+    validations:
+      required: false

@@ -1,0 +1,56 @@
+name: Documentation / 文档反馈 / 文件回饋 / ドキュメント / 문서
+description: Report documentation issues or suggest improvements. / 报告文档问题或提出文档改进建议。
+title: "[Docs]: "
+labels:
+  - documentation
+body:
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language / 语言 / 言語 / 언어
+      description: Select the language you will use. / 请选择你要使用的语言。 / 請選擇你要使用的語言。 / 使用する言語を選択してください。 / 사용할 언어를 선택하세요。
+      options:
+        - 简体中文
+        - English
+        - 繁體中文
+        - 日本語
+        - 한국어
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page or path / 文档位置 / 文件位置 / ページまたはパス / 문서 위치
+      description: |
+        Related README, docs path, or link.
+        相关 README、docs 路径或链接。
+        相關 README、docs 路徑或連結。
+        関連する README、docs パス、またはリンク。
+        관련 README, docs 경로 또는 링크。
+      placeholder: docs/explanatory-output-style/README.md
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue or suggestion / 问题或建议 / 問題或建議 / 問題または提案 / 문제 또는 제안
+      description: |
+        Explain what is unclear, outdated, broken, or missing.
+        说明哪里不清楚、过期、链接错误或需要补充。
+        說明哪裡不清楚、過期、連結錯誤或需要補充。
+        不明確、古い、リンク切れ、または不足している内容を説明してください。
+        무엇이 불명확하거나 오래되었거나 링크가 잘못되었거나 보충이 필요한지 설명해 주세요。
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed change / 建议改法 / 建議改法 / 変更案 / 제안하는 변경
+      description: |
+        If you have suggested wording or structure, write it here.
+        如果你有建议文案或结构，可以写在这里。
+        如果你有建議文案或結構，可以寫在這裡。
+        提案したい文章や構成があればここに書いてください。
+        제안 문구나 구조가 있다면 여기에 적어 주세요。
+    validations:
+      required: false

@@ -1,0 +1,67 @@
+name: Plugin request / 插件请求 / 插件請求 / プラグイン要望 / 플러그인 요청
+description: Request a new Antigravity plugin, hook, skill, or preset. / 请求新增 Antigravity 插件、hook、skill 或预设。
+title: "[Plugin request]: "
+labels:
+  - enhancement
+body:
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language / 语言 / 言語 / 언어
+      description: Select the language you will use. / 请选择你要使用的语言。 / 請選擇你要使用的語言。 / 使用する言語を選択してください。 / 사용할 언어를 선택하세요。
+      options:
+        - 简体中文
+        - English
+        - 繁體中文
+        - 日本語
+        - 한국어
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve / 想解决什么问题 / 想解決什麼問題 / 解決したい問題 / 해결하고 싶은 문제
+      description: |
+        Describe the Antigravity workflow you want a plugin to automate or standardize.
+        描述希望 Antigravity 插件帮你自动化或统一的工作流。
+        描述希望 Antigravity 插件幫你自動化或統一的工作流。
+        Antigravity プラグインで自動化または標準化したいワークフローを説明してください。
+        Antigravity 플러그인으로 자동화하거나 표준화하고 싶은 워크플로를 설명해 주세요。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Expected capability / 期望的插件能力 / 期望的插件能力 / 期待する機能 / 기대하는 기능
+      description: |
+        Explain whether it should include a manifest, hook, skill, MCP configuration, or other capability.
+        说明希望包含 manifest、hook、skill、MCP 配置还是其他能力。
+        說明希望包含 manifest、hook、skill、MCP 設定還是其他能力。
+        manifest、hook、skill、MCP 設定、その他の機能のどれを含めたいか説明してください。
+        manifest, hook, skill, MCP 설정 또는 다른 기능 중 무엇이 필요한지 설명해 주세요。
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Usage draft / 使用方式草案 / 使用方式草案 / 使い方の案 / 사용 방식 초안
+      description: |
+        If you already have installation steps, commands, or trigger behavior in mind, write them here.
+        如果你已经想好安装、命令或触发方式，可以写在这里。
+        如果你已經想好安裝、命令或觸發方式，可以寫在這裡。
+        インストール手順、コマンド、トリガー方法の案があればここに書いてください。
+        설치 방법, 명령 또는 트리거 방식이 이미 있다면 여기에 적어 주세요。
+    validations:
+      required: false
+  - type: textarea
+    id: safety
+    attributes:
+      label: Hook / Security considerations / Hook / 安全考虑 / Hook / 安全考量 / Hook / セキュリティ考慮 / Hook / 보안 고려사항
+      description: |
+        If a command hook is needed, explain what it runs and whether users need to trust it.
+        如果需要 command hook，请说明它会执行什么命令、是否需要用户 trust。
+        如果需要 command hook，請說明它會執行什麼命令、是否需要使用者 trust。
+        command hook が必要な場合は、実行するコマンドとユーザーの trust が必要かを説明してください。
+        command hook 이 필요하다면 어떤 명령을 실행하는지, 사용자의 trust 가 필요한지 설명해 주세요。
+    validations:
+      required: false
