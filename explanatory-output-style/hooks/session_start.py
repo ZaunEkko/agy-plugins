@@ -17,10 +17,11 @@ Insights should be included in the conversation, not in the codebase."""
 print(
     json.dumps(
         {
-            "hookSpecificOutput": {
-                "hookEventName": "SessionStart",
-                "additionalContext": ADDITIONAL_CONTEXT,
-            }
+            "injectSteps": [
+                {
+                    "ephemeralMessage": ADDITIONAL_CONTEXT
+                }
+            ]
         },
         ensure_ascii=False,
     )
