@@ -4,7 +4,7 @@
 
 ## Supported scope
 
-The latest released content on `main` is supported, along with plugin changes being prepared on `dev`.
+The latest released content on `main` is supported, along with plugin changes being prepared on `develop`.
 
 ## Reporting security issues
 

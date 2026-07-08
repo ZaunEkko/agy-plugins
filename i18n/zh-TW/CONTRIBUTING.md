@@ -9,28 +9,28 @@
 本倉庫使用 Git Flow：
 
 - `main`：穩定發布分支。
-- `dev`：日常整合分支。
-- `feature/*`：新功能、文件、插件改動，從 `dev` 拉出，完成後透過 PR 合回 `dev`。
-- `release/*`：發布準備，從 `dev` 拉出，完成後合入 `main` 和 `dev`。
-- `hotfix/*`：緊急修復，從 `main` 拉出，完成後合入 `main` 和 `dev`。
+- `develop`：日常整合分支。
+- `feature/*`：新功能、文件、插件改動，從 `develop` 拉出，完成後透過 PR 合回 `develop`。
+- `release/*`：發布準備，從 `develop` 拉出，完成後合入 `main` 和 `develop`。
+- `hotfix/*`：緊急修復，從 `main` 拉出，完成後合入 `main` 和 `develop`。
 
-不要直接推送到 `main` 或 `dev`。這兩個分支受保護，改動應透過 Pull Request 合併，並等待必要檢查通過。
+不要直接推送到 `main` 或 `develop`。這兩個分支受保護，改動應透過 Pull Request 合併，並等待必要檢查通過。
 
 ## 倉庫結構約定
 
 新增插件時，優先遵循以下結構：
 
 ```text
-plugins/<plugin-name>/
-├── .agy-plugin/
-│   └── plugin.json
+<plugin-name>/
+├── skills/
+├── hooks/
 └── ...
 
 docs/<plugin-name>/
 └── README.md
 ```
 
-- `plugins/<plugin-name>/` 放可安裝插件內容。
+- `<plugin-name>/` 放可安裝插件內容；按插件能力使用 `skills/`、`hooks/` 等子目錄。
 - `docs/<plugin-name>/README.md` 放面向安裝者和使用者的插件說明。
 - 根目錄 `README.md` 只做倉庫總覽和插件文件路由。
 - 不要提交本地 Claude Code 初始化檔案 `CLAUDE.md`；它已被 `.gitignore` 忽略。
@@ -47,7 +47,7 @@ docs/<plugin-name>/
 
 - 修改 Python hook：至少執行 `python -m py_compile <hook-script>`，並直接執行 hook 腳本確認輸出是有效 JSON。
 - 修改 hook 設定：確認 `hooks.json` 是有效 JSON，並審查 command / commandWindows 是否仍然安全、可讀、跨平台。
-- 修改插件 manifest：確認 `.agy-plugin/plugin.json` 是有效 JSON，且插件名、版本、描述和 marketplace 入口一致。
+- 修改插件 manifest（如果插件包含 manifest）：確認 manifest 是有效 JSON，且插件名、版本、描述和 marketplace 入口一致。
 - 修改插件行為：執行該插件對應測試；如果沒有測試，應補充聚焦測試或在 PR 中說明未補測試的原因。
 - 修改文件：檢查連結、路徑和安裝命令是否仍然準確。
 - 新增插件：確認 marketplace 能發現該插件，並在文件中寫明安裝和信任步驟。
@@ -55,9 +55,9 @@ docs/<plugin-name>/
 目前 `explanatory-output-style` 插件的維護者驗證範例：
 
 ```bash
-python -m py_compile plugins/explanatory-output-style/hooks/session_start.py
-python plugins/explanatory-output-style/hooks/session_start.py
-python -m unittest tests.test_explanatory_output_style
+python -m py_compile explanatory-output-style/hooks/session_start.py
+python explanatory-output-style/hooks/session_start.py
+python -m json.tool explanatory-output-style/hooks/hooks.json
 ```
 
 這些命令只是該插件的範例；新增插件應在自己的文件或測試中定義對應驗證方式。

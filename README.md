@@ -21,7 +21,7 @@
 ## ✨ 这个仓库是什么
 
 这是一个专为 **Google Antigravity (agy)** 打造的个人工作流 marketplace，用来持续沉淀可复用的 Antigravity 个性化能力。
-本项目摒弃了繁琐的配置文件，完全采用了高度语义化的 `SKILL.md` 和底层生命周期 Hooks 来严格约束 AI 的行为边界与工作流节点。
+本项目摒弃了繁琐的配置文件，采用高度语义化的 skill markdown 文件和底层生命周期 Hooks 来严格约束 AI 的行为边界与工作流节点。
 
 目标是把平时用着顺手的 Antigravity 配置打包起来，让大家通过 CLI 能够一键安装、静默更新和全局复用。
 
@@ -37,7 +37,7 @@
 | 插件 | 类型 | 说明 | 文档 |
 |------|------|------|------|
 | explanatory-output-style | Hook | 通过拦截 Session 启动生命周期，把原生的解释型协作体验（Insight 框）自动注入到 Antigravity 中。 | [插件文档](docs/explanatory-output-style/README.md) |
-| commit-commands | Skills | 提供极为严谨的 `commit`、`commit-push-pr` 与 `clean-gone` Git 分支工作流，并强制携带 Antigravity 联合开发者签名。 | [插件文档](docs/commit-commands/README.md) |
+| commit-commands | Skills | 提供极为严谨的 `commit`、`commit-push-pr` 与 `clean-gone` Git 分支工作流，并强制携带官方 Gemini bot 联合开发者签名。 | [插件文档](docs/commit-commands/README.md) |
 
 ## 🚀 快速开始
 
@@ -96,7 +96,7 @@ agy-plugins/
 │   └── skills/
 │       └── explanatory-output.md
 ```
-所有的工作流逻辑都死死地钉在 `SKILL.md` 里，没有任何过度设计的周边配置文件！
+工作流逻辑集中在 `skills/` 下的 markdown 文件与必要的 hook 脚本里，没有过度设计的周边配置文件！
 
 ## ⚠️ Trust & Safety
 
