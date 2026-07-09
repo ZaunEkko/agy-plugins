@@ -41,21 +41,29 @@
 
 ## 🚀 快速开始
 
-本项目依赖专门构建的 Antigravity 插件管理工具 `agy-plugins-cli`。
+本项目完全兼容官方原生规范，您可以选择使用官方原生方式极客安装，或使用我们提供的定制包管理器进行沉浸式管理。
 
-### 1. 安装 CLI
-全局安装我们的包管理器：
+### 方式一：原生极客安装 (推荐)
+直接使用 Google Antigravity (agy) 原生自带的远程 Git 批量插件拉取机制，一键安装全仓：
+```bash
+agy plugin install https://github.com/ZaunEkko/agy-plugins.git
+```
+*(注：官方原生机制会自动克隆仓库并扫描子目录下的 `plugin.json`，完成批量静默挂载。挂载后插件即在全局动态生效，无需去 `/hooks` 菜单审核。)*
+
+### 方式二：交互式 Marketplace 安装 (可选)
+如果您喜欢懒人式的 TUI 选择面板，可以安装我们针对 Antigravity 专门包装的第三方开源插件管理器：
+
+**1. 安装 CLI:**
 ```bash
 npm install -g agy-plugins-cli
 ```
 
-### 2. 绑定当前仓库并安装插件
-通过 CLI 沉浸式安装您需要的插件：
+**2. 绑定云端源并交互式安装:**
 ```bash
 # 绑定 ZaunEkko 的本插件仓库
 agy-plugin marketplace add ZaunEkko/agy-plugins
 
-# 启动交互式 TUI 面板，一键勾选所需插件（如 explanatory-output-style）
+# 启动交互式 TUI 面板，一键勾选所需插件
 agy-plugin marketplace list
 ```
 
