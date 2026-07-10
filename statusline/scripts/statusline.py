@@ -124,9 +124,18 @@ def main():
     hit_rate = (cached_prompt_tokens / total_prompt * 100) if total_prompt > 0 else 0.0
     
     ctx_usage = ctx_win.get("used_percentage", 0.0)
+    max_ctx = ctx_win.get("context_window_size", 0)
+    
+    # Format max context to readable string (e.g., 1M, 200K)
+    if max_ctx >= 1000000:
+        max_ctx_str = f"{max_ctx / 1000000:.1f}M".replace(".0M", "M")
+    elif max_ctx > 0:
+        max_ctx_str = f"{int(max_ctx / 1000)}K"
+    else:
+        max_ctx_str = "Unknown"
     
     line2 = (f"📈 未命中输入: {uncached_tokens} │ 🗂️ 缓存输入: {cached_prompt_tokens} │ "
-             f"📤 输出: {completion_tokens} │ 🎯 命中率: {hit_rate:.1f}% │ 🧠 上下文使用: {ctx_usage:.1f}%")
+             f"📤 输出: {completion_tokens} │ 🎯 命中率: {hit_rate:.1f}% │ 🧠 上下文使用: {ctx_usage:.1f}% ({max_ctx_str})")
              
     # ---------------------------------------------------------
     # ROW 3: Cost | Time | Plugin Ecosystem
