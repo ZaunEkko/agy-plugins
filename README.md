@@ -38,6 +38,7 @@
 |------|------|------|------|
 | explanatory-output-style | Hook | 通过拦截 Session 启动生命周期，把原生的解释型协作体验（Insight 框）自动注入到 Antigravity 中。 | [插件文档](docs/explanatory-output-style/README.md) |
 | commit-commands | Skills | 提供极为严谨的 `commit`、`commit-push-pr` 与 `clean-gone` Git 分支工作流，并强制携带官方 Gemini bot 联合开发者签名。 | [插件文档](docs/commit-commands/README.md) |
+| statusline | Script | 简洁信息状态栏，实时展示当前模型、Git 分支和工作区名称。 | [插件文档](docs/statusline/README.md) |
 
 ## 🚀 快速开始
 
@@ -86,6 +87,12 @@ agy-plugin add commit-commands@zaunekko
 
 *(注：涉及危险操作的 Skill（如 `clean-gone`）在删除分支前必须由用户人工审计确认。)*
 
+**statusline**：
+安装后配置 `settings.json` 的 `statusLine.command` 即可启用。在 CLI 底部实时展示当前模型、Git 分支和工作区名称，一目了然：
+```
+🤖 Claude Opus 4.6 (Thinking) │ ⎇ feature/my-branch │ 📂 my-project
+```
+
 ## 📚 插件架构
 
 本仓库采用纯粹的 Antigravity 兼容结构：
@@ -103,6 +110,9 @@ agy-plugins/
 │   │   └── session_start.py
 │   └── skills/
 │       └── explanatory-output.md
+├── statusline/
+│   └── scripts/
+│       └── statusline.py
 ```
 工作流逻辑集中在 `skills/` 下的 markdown 文件与必要的 hook 脚本里，没有过度设计的周边配置文件！
 
