@@ -91,9 +91,12 @@ def main():
     tel = state.get("telemetry", {})
     
     # ---------------------------------------------------------
-    # ROW 1: Model/Intensity | Workspace | Git Branch
+    # ROW 1: Model | Workspace | Git Branch
     # ---------------------------------------------------------
     model = state.get("model")
+    if isinstance(model, dict):
+        model = model.get("display_name") or model.get("id") or ""
+        
     if not model:
         try:
             with open(_SETTINGS_PATH, "r", encoding="utf-8") as f:
@@ -101,18 +104,11 @@ def main():
         except Exception:
             model = "Unknown Model"
             
-    # Extract thinking intensity (e.g., "(High)")
-    intensity = ""
-    if "(" in model and ")" in model:
-        start = model.find("(") + 1
-        end = model.find(")")
-        intensity = f"[{model[start:end]}]"
-        
     folder = os.path.basename(cwd)
     git_info = get_git_info(cwd)
     git_display = f" │ ⎇ {git_info}" if git_info else ""
     
-    line1 = f"🤖 {model} {intensity} │ 📂 {folder}{git_display}"
+    line1 = f"🤖 {model} │ 📂 {folder}{git_display}"
     
     # ---------------------------------------------------------
     # ROW 2: Uncached | Cached | Output | Hit Rate | Context
