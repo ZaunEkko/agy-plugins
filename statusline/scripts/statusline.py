@@ -161,17 +161,76 @@ def main():
             
     session_time = int(time.time() - start_time)
     
-    # 2. Session Cost Estimation
+    # 2. Session Cost Estimation & Dynamic Pricing
     tot_input = ctx_win.get("total_input_tokens", 0)
     tot_output = ctx_win.get("total_output_tokens", 0)
     
-    is_gemini = "Gemini" in model
-    # Gemini 1.5 Pro est: $1.25/M input (blended), $5.00/M output
-    # Opus est: $3.00/M input (blended), $15.00/M output
-    if is_gemini:
-        session_cost = (tot_input / 1000000) * 1.25 + (tot_output / 1000000) * 5.00
+    pricing_file = os.path.expanduser(r"~/.gemini/antigravity-cli/pricing.json")
+    
+    # Default fallback pricing (will be overwritten by background fetch if missing)
+    input_price = 1.25  # per million
+    output_price = 5.00 # per million
+    
+    needs_fetch = False
+    try:
+        if os.path.exists(pricing_file):
+            with open(pricing_file, "r", encoding="utf-8") as f:
+                pricing_db = json.load(f)
+                
+            if model in pricing_db:
+                input_price = pricing_db[model].get("input", input_price)
+                output_price = pricing_db[model].get("output", output_price)
+            else:
+                needs_fetch = True
+        else:
+            needs_fetch = True
+    except Exception:
+        pass
+        
+    if needs_fetch and model and model != "Unknown Model":
+        # Spawn detached background process to fetch pricing so we don't block the UI
+        try:
+            fetch_script = f"""
+import json, urllib.request, os
+pricing_file = r'{pricing_file}'
+model = '{model}'
+try:
+    if os.path.exists(pricing_file):
+        with open(pricing_file, 'r', encoding='utf-8') as f:
+            db = json.load(f)
     else:
-        session_cost = (tot_input / 1000000) * 3.00 + (tot_output / 1000000) * 15.00
+        db = {{}}
+    
+    # In a full implementation, we'd fetch from Litellm or similar here.
+    # For now, we seed standard values based on fuzzy matching.
+    inp, out = 1.25, 5.00
+    m = model.lower()
+    if 'opus' in m: inp, out = 15.00, 75.00
+    elif 'sonnet' in m: inp, out = 3.00, 15.00
+    elif 'gemini' in m and 'pro' in m: inp, out = 1.25, 5.00
+    elif 'gemini' in m and 'flash' in m: inp, out = 0.075, 0.30
+    elif 'gpt-4o' in m: inp, out = 5.00, 15.00
+    
+    db[model] = {{"input": inp, "output": out}}
+    with open(pricing_file, 'w', encoding='utf-8') as f:
+        json.dump(db, f, indent=2)
+except Exception:
+    pass
+"""
+            import tempfile
+            tmp_fetcher = os.path.join(tempfile.gettempdir(), "agy_pricing_fetcher.py")
+            with open(tmp_fetcher, "w", encoding="utf-8") as tf:
+                tf.write(fetch_script)
+                
+            # Run detached
+            if os.name == 'nt':
+                subprocess.Popen([sys.executable, tmp_fetcher], creationflags=subprocess.CREATE_NO_WINDOW)
+            else:
+                subprocess.Popen([sys.executable, tmp_fetcher], start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+
+    session_cost = (tot_input / 1000000) * input_price + (tot_output / 1000000) * output_price
         
     # 3. Workspace Cost Tracking
     workspace_cost = session_cost
