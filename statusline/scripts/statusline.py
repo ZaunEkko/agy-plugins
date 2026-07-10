@@ -113,16 +113,17 @@ def main():
     # ---------------------------------------------------------
     # ROW 2: Uncached | Cached | Output | Hit Rate | Context
     # ---------------------------------------------------------
-    prompt_tokens = tel.get("prompt_tokens", 0)
-    cached_prompt_tokens = tel.get("cached_prompt_tokens", 0)
-    completion_tokens = tel.get("completion_tokens", 0)
+    ctx_win = state.get("context_window", {})
+    curr_usage = ctx_win.get("current_usage", {})
     
-    uncached_tokens = max(0, prompt_tokens - cached_prompt_tokens)
-    hit_rate = (cached_prompt_tokens / prompt_tokens * 100) if prompt_tokens > 0 else 0.0
+    uncached_tokens = curr_usage.get("input_tokens", 0)
+    cached_prompt_tokens = curr_usage.get("cache_read_input_tokens", 0)
+    completion_tokens = curr_usage.get("output_tokens", 0)
     
-    # Context usage assumption: Gemini 2M, Others 200k
-    max_ctx = 2000000 if "Gemini" in model else 200000
-    ctx_usage = (prompt_tokens / max_ctx * 100) if max_ctx > 0 else 0.0
+    total_prompt = uncached_tokens + cached_prompt_tokens
+    hit_rate = (cached_prompt_tokens / total_prompt * 100) if total_prompt > 0 else 0.0
+    
+    ctx_usage = ctx_win.get("used_percentage", 0.0)
     
     line2 = (f"📈 未命中输入: {uncached_tokens} │ 🗂️ 缓存输入: {cached_prompt_tokens} │ "
              f"📤 输出: {completion_tokens} │ 🎯 命中率: {hit_rate:.1f}% │ 🧠 上下文使用: {ctx_usage:.1f}%")
@@ -130,14 +131,41 @@ def main():
     # ---------------------------------------------------------
     # ROW 3: Cost | Time | Plugin Ecosystem
     # ---------------------------------------------------------
-    session_cost = tel.get("session_cost", 0.0)
-    workspace_cost = tel.get("workspace_cost", 0.0)
-    session_time = tel.get("session_duration_seconds", 0)
+    import time
+    import tempfile
     
-    # Fallback to estimated cost if telemetry is zero
-    if session_cost == 0.0 and prompt_tokens > 0:
-        session_cost = calculate_estimated_cost(prompt_tokens, cached_prompt_tokens, completion_tokens, "Gemini" in model)
+    # 1. Session Duration Tracking
+    session_id = state.get("session_id", "unknown")
+    start_time = time.time()
+    if session_id != "unknown":
+        timer_file = os.path.join(tempfile.gettempdir(), f"agy_timer_{session_id}.txt")
+        if not os.path.exists(timer_file):
+            try:
+                with open(timer_file, "w") as tf:
+                    tf.write(str(start_time))
+            except Exception: pass
+        else:
+            try:
+                with open(timer_file, "r") as tf:
+                    start_time = float(tf.read().strip())
+            except Exception: pass
+            
+    session_time = int(time.time() - start_time)
+    
+    # 2. Session Cost Estimation
+    tot_input = ctx_win.get("total_input_tokens", 0)
+    tot_output = ctx_win.get("total_output_tokens", 0)
+    
+    is_gemini = "Gemini" in model
+    # Gemini 1.5 Pro est: $1.25/M input (blended), $5.00/M output
+    # Opus est: $3.00/M input (blended), $15.00/M output
+    if is_gemini:
+        session_cost = (tot_input / 1000000) * 1.25 + (tot_output / 1000000) * 5.00
+    else:
+        session_cost = (tot_input / 1000000) * 3.00 + (tot_output / 1000000) * 15.00
         
+    workspace_cost = 0.0000 # Requires persistent DB tracking, placeholder for now
+    
     # Formatting time
     m, s = divmod(session_time, 60)
     h, m = divmod(m, 60)
