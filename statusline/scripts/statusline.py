@@ -164,7 +164,31 @@ def main():
     else:
         session_cost = (tot_input / 1000000) * 3.00 + (tot_output / 1000000) * 15.00
         
-    workspace_cost = 0.0000 # Requires persistent DB tracking, placeholder for now
+    # 3. Workspace Cost Tracking
+    workspace_cost = session_cost
+    if session_id != "unknown" and cwd:
+        costs_db_file = os.path.expanduser(r"~/.gemini/antigravity-cli/workspace_costs.json")
+        try:
+            db = {}
+            if os.path.exists(costs_db_file):
+                with open(costs_db_file, "r", encoding="utf-8") as f:
+                    db = json.load(f)
+                    
+            ws_data = db.get(cwd, {"accumulated_cost": 0.0, "last_session_id": "", "last_session_cost": 0.0})
+            
+            if ws_data["last_session_id"] != session_id:
+                ws_data["accumulated_cost"] += ws_data["last_session_cost"]
+                ws_data["last_session_id"] = session_id
+                
+            ws_data["last_session_cost"] = session_cost
+            db[cwd] = ws_data
+            
+            with open(costs_db_file, "w", encoding="utf-8") as f:
+                json.dump(db, f)
+                
+            workspace_cost = ws_data["accumulated_cost"] + session_cost
+        except Exception:
+            pass
     
     # Formatting time
     m, s = divmod(session_time, 60)
