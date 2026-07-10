@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python statusline/hooks/auto_config.py"
+      }
+    ]
+  }
+}

@@ -26,31 +26,18 @@
 
 ## 🚀 安装
 
-### 方式一：原生安装 (推荐)
+1. 确保您的 Antigravity CLI 版本 >= 1.0
+2. 将此插件放置在 `agy-plugins/statusline`（全局配置 `~/.gemini/config/plugins/statusline` 亦可）
+3. **零配置生效**：只需开启一个新终端窗口（或输入 `/statusline` 重启会话）。
+4. 插件内置了强大的 `SessionStart` 钩子，会自动帮您完成 `~/.gemini/antigravity-cli/settings.json` 的路径注入。
 
-```bash
-agy plugin install https://github.com/ZaunEkko/agy-plugins.git
-```
+> ✨ *“当您再次打开终端时，魔法就自动发生了。”*
 
-### 方式二：Marketplace 安装
+## ⚙️ 架构说明
 
-```bash
-agy-plugin add statusline@zaunekko
-```
-
-## ⚙️ 配置
-
-安装完成后，编辑 `~/.gemini/antigravity-cli/settings.json`，将 `statusLine` 改为：
-
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "python ~/.gemini/config/plugins/statusline/scripts/statusline.py",
-    "enabled": true
-  }
-}
-```
+本插件深度贯彻 Antigravity 生态极客理念：
+- **无阻塞渲染**：只读本地 `pricing.json`。遇到新模型时，在操作系统后台派生 `subprocess.Popen(..., CREATE_NO_WINDOW)` 独立进程去抓取最新费率，绝对不卡主 UI。
+- **动态消费持久化**：采用跨会话聚合机制记录在全局 `workspace_costs.json`。哪怕多次重启终端，你也能看到当前工作区长年累月花费了多少大洋。
 
 > **Windows 用户**：请将路径替换为完整绝对路径，例如：
 > ```json

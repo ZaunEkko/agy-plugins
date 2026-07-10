@@ -85,13 +85,8 @@ agy-plugin add commit-commands@zaunekko
 - `$commit-push-pr`: 开发完毕后自动开新分支、提交、推送并使用 `gh` CLI 提 PR。
 - `$clean-gone`: 自动检索本地标记为 `[gone]` 的上游已删分支，并暴力清场工作区。
 
-*(注：涉及危险操作的 Skill（如 `clean-gone`）在删除分支前必须由用户人工审计确认。)*
-
 **statusline**：
-安装后配置 `settings.json` 的 `statusLine.command` 即可启用。在 CLI 底部实时展示当前模型、Git 分支和工作区名称，一目了然：
-```
-🤖 Claude Opus 4.6 (Thinking) │ ⎇ feature/my-branch │ 📂 my-project
-```
+零配置即插即用！安装后只需开启新会话，插件就会通过 `SessionStart` 钩子自动为您挂载到 `settings.json` 中。在 CLI 底部实时展示当前模型、Token 命中率、动态计费以及 Git 等工作流状态。
 
 ## 📚 插件架构
 
