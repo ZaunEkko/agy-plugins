@@ -12,11 +12,14 @@ Adapt Anthropic's `/commit-push-pr` workflow as a native Antigravity skill.
 1. Inspect `git status`, the staged and unstaged changes with `git diff HEAD`, the current branch with `git branch --show-current`, and the commits between the intended PR base and `HEAD`.
 2. Require GitHub CLI, an authenticated `gh` session, and an `origin` remote. Use a base branch explicitly named by the user; otherwise use the remote default branch.
 3. If the worktree has staged or unstaged changes:
+   - Read the active model name from the `commit-commands runtime metadata for this turn` developer context injected by the plugin hook. Use the exact `Model:` line provided there; do not independently infer it from config, environment variables, or transcript files.
+   - If that runtime metadata is missing or says the model is unavailable, stop before creating a branch, staging, or committing. Tell the user to review and trust the plugin hook with `/hooks`, then retry in a new turn.
    - If the current branch is exactly `main`, create a new work branch with `git checkout -b <branch>`.
    - Stage the current changes and create exactly one commit with an appropriate message. Append this attribution block:
 
 ```text
 Generated with [Antigravity](https://antigravity.google/product)
+Model: <active-model-name>
 
 Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
