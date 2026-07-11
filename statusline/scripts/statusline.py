@@ -224,9 +224,17 @@ except Exception:
                 
             # Run detached
             if os.name == 'nt':
-                subprocess.Popen([sys.executable, tmp_fetcher], creationflags=subprocess.CREATE_NO_WINDOW)
+                subprocess.Popen([sys.executable, tmp_fetcher], 
+                                 creationflags=subprocess.CREATE_NO_WINDOW,
+                                 stdin=subprocess.DEVNULL, 
+                                 stdout=subprocess.DEVNULL, 
+                                 stderr=subprocess.DEVNULL)
             else:
-                subprocess.Popen([sys.executable, tmp_fetcher], start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.Popen([sys.executable, tmp_fetcher], 
+                                 start_new_session=True, 
+                                 stdin=subprocess.DEVNULL,
+                                 stdout=subprocess.DEVNULL, 
+                                 stderr=subprocess.DEVNULL)
         except Exception:
             pass
 
