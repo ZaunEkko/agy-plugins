@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python commit-commands/hooks/model_context.py"
+          }
+        ]
+      }
+    ]
+  }
+}

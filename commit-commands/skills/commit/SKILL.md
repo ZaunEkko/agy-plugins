@@ -14,13 +14,18 @@ Adapt Anthropic's `/commit` workflow as a native Antigravity skill.
 3. Inspect the current branch with `git branch --show-current`.
 4. Inspect the latest ten commits with `git log --oneline -10` and match the repository's commit-message style.
 5. Based on the current changes, stage the relevant files.
-6. Create exactly one commit with an appropriate message and append:
+6. Read the active model name from the `commit-commands runtime metadata for this turn` developer context injected by the plugin hook. Use the exact `Model:` line provided there; do not independently infer it from config, environment variables, or transcript files.
+7. If that runtime metadata is missing or says the model is unavailable, stop before staging or committing. Tell the user to review and trust the plugin hook with `/hooks`, then retry in a new turn.
+8. Create exactly one commit with an appropriate message and append this attribution block:
 
 ```text
+Generated with [Antigravity](https://antigravity.google/product)
+Model: <active-model-name>
+
 Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
-7. Report the resulting commit and status.
+9. Report the resulting commit and status.
 
 ## Boundaries
 
