@@ -14,9 +14,11 @@ Adapt Anthropic's `/commit` workflow as a native Antigravity skill.
 3. Inspect the current branch with `git branch --show-current`.
 4. Inspect the latest ten commits with `git log --oneline -10` and match the repository's commit-message style.
 5. Based on the current changes, stage the relevant files.
-6. Create exactly one commit with an appropriate message and append:
+6. Create exactly one commit with an appropriate message and append this attribution block:
 
 ```text
+Generated with [Antigravity](https://antigravity.google/product)
+
 Co-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>
 ```
 
