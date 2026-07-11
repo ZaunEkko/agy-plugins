@@ -1,0 +1,5 @@
+{
+  "name": "statusline",
+  "version": "1.0.0",
+  "description": "A clean, informative status bar displaying model, git branch, and workspace for the Antigravity CLI"
+}
