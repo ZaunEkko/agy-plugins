@@ -18,7 +18,7 @@ def setup():
         
         # Normalize path separators for the JSON file
         script_path = script_path.replace("\\", "/")
-        target_cmd = f'python "{script_path}"'
+        target_cmd = f'python {script_path}'
         
         status_cfg = data.get("statusLine", {})
         if status_cfg.get("command") == target_cmd and status_cfg.get("enabled"):
