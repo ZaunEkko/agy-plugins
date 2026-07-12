@@ -185,22 +185,42 @@ def main():
     # ---------------------------------------------------------
     import time
     
-    # 1. Session Duration Tracking
-    start_time = time.time()
+    # 1. Active Work Duration Tracking
+    # Only counts time when agent_state == "working", not idle window time.
+    now = time.time()
+    agent_state = state.get("agent_state", "")
+    session_time = 0
+    
     if session_id != "unknown":
-        timer_file = os.path.join(tempfile.gettempdir(), f"agy_timer_{session_id}.txt")
-        if not os.path.exists(timer_file):
-            try:
-                with open(timer_file, "w") as tf:
-                    tf.write(str(start_time))
-            except Exception: pass
-        else:
-            try:
-                with open(timer_file, "r") as tf:
-                    start_time = float(tf.read().strip())
-            except Exception: pass
-            
-    session_time = int(time.time() - start_time)
+        timer_file = os.path.join(tempfile.gettempdir(), f"agy_timer_{session_id}.json")
+        timer_data = {"work_seconds": 0.0, "last_tick": 0.0, "last_state": ""}
+        
+        try:
+            if os.path.exists(timer_file):
+                with open(timer_file, "r", encoding="utf-8") as tf:
+                    timer_data = json.load(tf)
+        except Exception:
+            pass
+        
+        last_tick = timer_data.get("last_tick", 0.0)
+        last_state = timer_data.get("last_state", "")
+        
+        # If we were working last tick, accumulate the delta (cap at 60s to
+        # avoid huge jumps from sleep/suspend)
+        if last_state == "working" and last_tick > 0:
+            delta = min(now - last_tick, 60.0)
+            timer_data["work_seconds"] = timer_data.get("work_seconds", 0.0) + delta
+        
+        timer_data["last_tick"] = now
+        timer_data["last_state"] = agent_state
+        
+        try:
+            with open(timer_file, "w", encoding="utf-8") as tf:
+                json.dump(timer_data, tf)
+        except Exception:
+            pass
+        
+        session_time = int(timer_data.get("work_seconds", 0.0))
     
     # 2. Session Cost Estimation & Dynamic Pricing
     tot_input = ctx_win.get("total_input_tokens", 0)
