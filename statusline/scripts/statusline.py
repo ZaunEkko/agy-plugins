@@ -38,6 +38,14 @@ def get_git_info(cwd):
     dirty = "*" if status.strip() else ""
     return f"{branch}{dirty}"
 
+def fmt_num(n):
+    """Format number to human-readable string: 1234 → 1.2K, 1234567 → 1.2M."""
+    if n >= 1000000:
+        return f"{n / 1000000:.1f}M"
+    elif n >= 1000:
+        return f"{n / 1000:.1f}K"
+    return str(n)
+
 def count_keys_in_json(filepath):
     """Count top-level keys in a JSON object file."""
     try:
@@ -169,8 +177,8 @@ def main():
     else:
         max_ctx_str = "Unknown"
     
-    line2 = (f"📈 未命中输入: {uncached_tokens} │ 🗂️ 缓存输入: {cached_prompt_tokens} │ "
-             f"📤 输出: {completion_tokens} │ 🎯 命中率: {hit_rate:.1f}% │ 🧠 上下文使用: {ctx_usage:.1f}% ({max_ctx_str})")
+    line2 = (f"📈 未命中输入: {fmt_num(uncached_tokens)} │ 🗂️ 缓存输入: {fmt_num(cached_prompt_tokens)} │ "
+             f"📤 输出: {fmt_num(completion_tokens)} │ 🎯 命中率: {hit_rate:.1f}% │ 🧠 上下文使用: {ctx_usage:.1f}% ({max_ctx_str})")
              
     # ---------------------------------------------------------
     # ROW 3: Cost | Time | Plugin Ecosystem
