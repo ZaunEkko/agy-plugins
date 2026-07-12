@@ -113,12 +113,47 @@ def main():
     # ---------------------------------------------------------
     # ROW 2: Uncached | Cached | Output | Hit Rate | Context
     # ---------------------------------------------------------
+    import tempfile
+    
     ctx_win = state.get("context_window", {})
     curr_usage = ctx_win.get("current_usage", {})
     
-    uncached_tokens = curr_usage.get("input_tokens", 0)
-    cached_prompt_tokens = curr_usage.get("cache_read_input_tokens", 0)
-    completion_tokens = curr_usage.get("output_tokens", 0)
+    # Session-level token accumulator
+    # current_usage only shows THIS turn's tokens. We accumulate across
+    # all turns by detecting when total_input/output changes (= new turn).
+    session_id = state.get("session_id", "unknown")
+    total_in = ctx_win.get("total_input_tokens", 0)
+    total_out = ctx_win.get("total_output_tokens", 0)
+    
+    tracker = {"prev_total_in": 0, "prev_total_out": 0,
+               "sum_uncached": 0, "sum_cached": 0, "sum_output": 0}
+    
+    if session_id != "unknown":
+        tracker_file = os.path.join(tempfile.gettempdir(), f"agy_tokens_{session_id}.json")
+        try:
+            if os.path.exists(tracker_file):
+                with open(tracker_file, "r", encoding="utf-8") as f:
+                    tracker = json.load(f)
+        except Exception:
+            pass
+        
+        # Detect new turn: totals changed since last render
+        if total_in != tracker.get("prev_total_in", 0) or total_out != tracker.get("prev_total_out", 0):
+            tracker["sum_uncached"] = tracker.get("sum_uncached", 0) + curr_usage.get("input_tokens", 0)
+            tracker["sum_cached"] = tracker.get("sum_cached", 0) + curr_usage.get("cache_read_input_tokens", 0)
+            tracker["sum_output"] = tracker.get("sum_output", 0) + curr_usage.get("output_tokens", 0)
+            tracker["prev_total_in"] = total_in
+            tracker["prev_total_out"] = total_out
+            
+            try:
+                with open(tracker_file, "w", encoding="utf-8") as f:
+                    json.dump(tracker, f)
+            except Exception:
+                pass
+    
+    uncached_tokens = tracker.get("sum_uncached", 0)
+    cached_prompt_tokens = tracker.get("sum_cached", 0)
+    completion_tokens = tracker.get("sum_output", 0)
     
     total_prompt = uncached_tokens + cached_prompt_tokens
     hit_rate = (cached_prompt_tokens / total_prompt * 100) if total_prompt > 0 else 0.0
@@ -141,10 +176,8 @@ def main():
     # ROW 3: Cost | Time | Plugin Ecosystem
     # ---------------------------------------------------------
     import time
-    import tempfile
     
     # 1. Session Duration Tracking
-    session_id = state.get("session_id", "unknown")
     start_time = time.time()
     if session_id != "unknown":
         timer_file = os.path.join(tempfile.gettempdir(), f"agy_timer_{session_id}.txt")
